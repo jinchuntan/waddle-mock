@@ -1,0 +1,29 @@
+{
+  "name": "waddle-agent",
+  "version": "1.0.0",
+  "description": "Waddle — procurement AI agent powered by Lua AI",
+  "license": "ISC",
+  "author": "Fovea",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "lua chat",
+    "web": "concurrently --names backend,frontend -c blue,green \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
+    "build": "npm run build --prefix frontend && npm run build --prefix backend",
+    "start": "npm run start --prefix backend",
+    "test": "lua test",
+    "push": "lua push --force",
+    "deploy": "lua deploy"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "concurrently": "^9.2.1",
+    "tsx": "^4.7.0",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "lua-cli": "^3.12.2",
+    "playwright": "^1.49.0",
+    "zod": "^3.24.1"
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "lastHash": "23025c9627f49d2d4a7ba99a0158efa852ecb599dc0a911e05d1515554689b34",
+  "lastPushedAt": "2026-04-28T14:22:40.407Z",
+  "files": [
+    {
+      "relativePath": ".claude/settings.json",
+      "hash": "8c67c78728a5f1b7"
+    },
+    {
+      "relativePath": "env.example",
+      "hash": "bc6b22f8c1fbd219"
+    },
+    {
+      "relativePath": "frontend/index.html",
+      "hash": "f465d80985ee1a4c"
+    },
+    {
+      "relativePath": "frontend/package.json",
+      "hash": "9346f97dc57fa37f"
+    },
+    {
+      "relativePath": "frontend/src/App.jsx",
+      "hash": "3339a11f767edb53"
+    },
+    {
+      "relativePath": "frontend/src/components/HeroSearch/HeroSearch.css",
+      "hash": "aab491782089aee8"
+    },
+    {
+      "relativePath": "frontend/src/components/HeroSearch/HeroSearch.jsx",
+      "hash": "6bb879bfd419726a"
+    },
+    {
+      "relativePath": "frontend/src/components/Navbar/LocationSwitcher.css",
+      "hash": "aafb01ef44475392"
+    },
+    {
+      "relativePath": "frontend/src/components/Navbar/LocationSwitcher.jsx",
+      "hash": "d1ee3d9cf7262db6"
+    },
+    {
+      "relativePath": "frontend/src/components/Navbar/Navbar.css",
+      "hash": "1fc9b76e52b269b0"
+    },
+    {
+      "relativePath": "frontend/src/components/Navbar/Navbar.jsx",
+      "hash": "fce8bbd63e0470e5"
+    },
+    {
+      "relativePath": "frontend/src/context/LocationContext.jsx",
+      "hash": "cbb351bd23ed62ed"
+    },
+    {
+      "relativePath": "frontend/src/hooks/useWaddleChat.js",
+      "hash": "68b7184ffbade24c"
+    },
+    {
+      "relativePath": "frontend/src/index.css",
+      "hash": "f59ee45b64ab62be"
+    },
+    {
+      "relativePath": "frontend/src/lib/waddleApi.js",
+      "hash": "b2da346d4060045c"
+    },
+    {
+      "relativePath": "frontend/src/main.jsx",
+      "hash": "cf1ac1f6bf77b149"
+    },
+    {
+      "relativePath": "frontend/vite.config.js",
+      "hash": "6dc0ce25c4170ac9"
+    },
+    {
+      "relativePath": "lua.skill.yaml",
+      "hash": "2725d5964e22e94a"
+    },
+    {
+      "relativePath": "package.json",
+      "hash": "695111dc871054cd"
+    },
+    {
+      "relativePath": "QUICKSTART.md",
+      "hash": "587b1ccc602bf101"
+    },
+    {
+      "relativePath": "README.md",
+      "hash": "ab3de41a16b4a788"
+    },
+    {
+      "relativePath": "src/index.ts",
+      "hash": "b4e32e1d2bca491e"
+    },
+    {
+      "relativePath": "src/skills/webScraping.skill.ts",
+      "hash": "9bec5a89027fc8c7"
+    },
+    {
+      "relativePath": "src/tools/extractProductData.tool.ts",
+      "hash": "098898d7f319aaed"
+    },
+    {
+      "relativePath": "src/tools/scrapeAuthenticatedPage.tool.ts",
+      "hash": "cfc17533c5bf5187"
+    },
+    {
+      "relativePath": "src/tools/scrapePublicPage.tool.ts",
+      "hash": "5d1bcf0f0302bfdd"
+    },
+    {
+      "relativePath": "src/utils/browserManager.ts",
+      "hash": "6f010847581083cf"
+    },
+    {
+      "relativePath": "src/utils/sessionStore.ts",
+      "hash": "61e3d535b7946775"
+    },
+    {
+      "relativePath": "tsconfig.json",
+      "hash": "748d6fffca1cc9ce"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+.waddling-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 48px 0 32px;
+}
+
+/* Ring */
+.waddling-loader__ring {
+  width: 56px;
+  height: 56px;
+  animation: waddling-spin 1.1s linear infinite;
+}
+
+.waddling-loader__track {
+  stroke: rgba(74, 144, 164, 0.15);
+  stroke-width: 3.5;
+}
+
+.waddling-loader__arc {
+  stroke: #4A90A4;
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-dasharray: 80 45;
+  stroke-dashoffset: 0;
+}
+
+@keyframes waddling-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Text — fades in when key changes */
+.waddling-loader__label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #94a3b8;
+  letter-spacing: 0.01em;
+  animation: waddling-fade 0.4s ease;
+}
+
+@keyframes waddling-fade {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}

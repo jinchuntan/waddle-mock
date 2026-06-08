@@ -1,0 +1,134 @@
+.wa-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 20, 35, 0.5);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 16px;
+}
+
+.wa-modal {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(10, 20, 35, 0.22);
+  padding: 28px 28px 24px;
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  position: relative;
+  animation: wa-in 0.18s ease;
+}
+
+@keyframes wa-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.wa-modal__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-slate);
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+  transition: color 0.14s, background 0.14s;
+}
+.wa-modal__close:hover {
+  color: var(--color-navy);
+  background: var(--color-slate-100);
+}
+
+.wa-modal__brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-navy);
+}
+
+.wa-modal__subtitle {
+  font-size: 0.82rem;
+  color: var(--color-slate);
+  text-align: center;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* QR area */
+.wa-modal__qr-area {
+  width: 224px;
+  height: 224px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1.5px solid var(--color-slate-200);
+  overflow: hidden;
+}
+
+.wa-modal__qr-img {
+  width: 208px;
+  height: 208px;
+  border-radius: 6px;
+  display: block;
+}
+
+.wa-modal__placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.82rem;
+  color: var(--color-slate);
+  text-align: center;
+  padding: 12px;
+}
+
+.wa-modal__placeholder--success {
+  color: #16a34a;
+  font-weight: 600;
+}
+
+/* Spinner */
+.wa-spinner {
+  width: 28px;
+  height: 28px;
+  border: 2.5px solid var(--color-slate-200);
+  border-top-color: var(--color-navy);
+  border-radius: 50%;
+  animation: wa-spin 0.7s linear infinite;
+}
+
+@keyframes wa-spin { to { transform: rotate(360deg); } }
+
+/* Steps */
+.wa-modal__steps {
+  text-align: left;
+  width: 100%;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin: 0;
+}
+
+.wa-modal__steps li {
+  font-size: 0.81rem;
+  color: var(--color-navy);
+  line-height: 1.5;
+}

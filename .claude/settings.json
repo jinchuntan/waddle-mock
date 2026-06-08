@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm create *)",
+      "Read(//c/Users/damna/**)",
+      "Bash(npm config *)",
+      "Bash(npx create-vite@latest . --template react --force)",
+      "Bash(npm install *)",
+      "WebFetch(domain:claude.ai)",
+      "WebFetch(domain:docs.heylua.ai)",
+      "Bash(lua --version)",
+      "Bash(lua --help)",
+      "Bash(lua init *)",
+      "Bash(lua auth *)",
+      "Bash(node -e \"const lua = require\\('lua-cli'\\); console.log\\(Object.keys\\(lua\\)\\)\")",
+      "Bash(node -e ' *)",
+      "Bash(xargs grep *)",
+      "Bash(npx playwright *)",
+      "Bash(npm run *)",
+      "Bash(lua push *)",
+      "Bash(lua persona *)",
+      "WebSearch",
+      "WebFetch(domain:chat.heylua.ai)",
+      "WebFetch(domain:heylua.ai)",
+      "Bash(cp -r /c/Users/damna/Documents/GitHub/waddle/agent/src/skills /c/Users/damna/Documents/GitHub/waddle/src/skills)",
+      "Bash(cp -r /c/Users/damna/Documents/GitHub/waddle/agent/src/tools  /c/Users/damna/Documents/GitHub/waddle/src/tools)",
+      "Bash(cp -r /c/Users/damna/Documents/GitHub/waddle/agent/src/utils  /c/Users/damna/Documents/GitHub/waddle/src/utils)",
+      "Bash(lua admin *)",
+      "Bash(python3 -m json.tool)",
+      "Bash(curl -s -X PATCH https://api.heylua.ai/agents/baseAgent/sub-agent -H 'Content-Type: application/json' -H 'Authorization: Bearer api_8e5dd01e94ea422ab0e6641f662e719d' -d '{\"id\":\"agent_1777281593894_0t5ugvvrs\",\"model\":\"anthropic/claude-sonnet-4-5\"}')",
+      "Bash(curl -s http://localhost:5174/)",
+      "Bash(curl -s \"http://localhost:5174/src/components/HeroSearch/HeroSearch.jsx\")",
+      "Bash(curl -s \"http://localhost:5174/@fs/$\\(pwd\\)/frontend/src/components/QuestionCard/QuestionCard.jsx\")",
+      "Bash(curl -s \"http://localhost:5174/src/components/RecommendationCard/RecommendationCard.jsx\")",
+      "Bash(node -e \"require\\('xlsx'\\); console.log\\('xlsx installed ok'\\)\")",
+      "Bash(ls node_modules/xlsx/package.json)",
+      "Bash(npx tsc *)"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\damna\\.claude\\projects\\c--Users-damna-Documents-GitHub-waddle\\memory"
+    ]
+  }
+}

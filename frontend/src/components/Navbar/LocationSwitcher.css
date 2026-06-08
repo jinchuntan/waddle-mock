@@ -1,0 +1,119 @@
+/* ── Location Switcher ────────────────────────────────────── */
+.loc-switcher {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Trigger button */
+.loc-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border-radius: var(--radius-md);
+  border: none;
+  background: transparent;
+  color: #f1f5f9;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: opacity 0.15s ease;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+}
+
+.loc-trigger:hover {
+  opacity: 0.7;
+}
+
+.loc-trigger:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(74, 144, 164, 0.25);
+  border-radius: var(--radius-md);
+}
+
+.loc-trigger__label {
+  line-height: 1;
+}
+
+/* Animated chevron */
+.loc-trigger__chevron {
+  display: flex;
+  align-items: center;
+  color: #94a3b8;
+  transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-left: 2px;
+}
+
+.loc-trigger__chevron--open {
+  transform: rotate(180deg);
+}
+
+/* Dropdown panel */
+.loc-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 180px;
+  z-index: 200;
+
+  /* Hidden state */
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+  transition:
+    max-height 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.2s ease;
+}
+
+.loc-dropdown--open {
+  max-height: 200px;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.loc-dropdown__inner {
+  background: transparent;
+  border: none;
+  padding: 4px 0;
+}
+
+/* Individual option */
+.loc-option {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: var(--radius-sm);
+  color: #f1f5f9;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.12s ease;
+  text-align: center;
+  justify-content: center;
+}
+
+.loc-option:hover {
+  opacity: 0.6;
+}
+
+.loc-option:focus-visible {
+  outline: none;
+  opacity: 0.6;
+}
+
+/* ── Mobile ───────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .loc-trigger {
+    font-size: 0.85rem;
+  }
+
+  .loc-dropdown {
+    width: 140px;
+  }
+}

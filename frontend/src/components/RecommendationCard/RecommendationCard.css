@@ -1,0 +1,166 @@
+.rec-card {
+  background: #fff;
+  border: 1.5px solid var(--color-slate-200);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow: hidden;
+  transition: box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.rec-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: rgba(74, 144, 164, 0.4);
+}
+
+.rec-card__body {
+  padding: 20px 20px 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rec-card__company {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-navy);
+  line-height: 1.3;
+  margin: 0;
+}
+
+.rec-card__price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-blue);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.rec-card__contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.rec-card__contact {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.82rem;
+  color: var(--color-slate);
+  text-decoration: none;
+  transition: color 0.14s ease;
+  line-height: 1.3;
+}
+
+.rec-card__contact svg {
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+.rec-card__contact:hover {
+  color: var(--color-navy);
+}
+
+.rec-card__contact--link span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 200px;
+}
+
+.rec-card__contact--link:hover {
+  color: var(--color-blue);
+}
+
+.rec-card__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  border-top: 1.5px solid var(--color-slate-100);
+}
+
+/* When supplier has no phone: only Buy Now + Email (2 cols) */
+.rec-card__actions--email-only {
+  grid-template-columns: 1fr 1fr;
+}
+
+.rec-card__btn {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 13px 6px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.14s ease, color 0.14s ease;
+  letter-spacing: 0.01em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+/* Buy Now — left, dark background */
+.rec-card__btn--buy {
+  background: var(--color-navy);
+  color: #fff;
+  border-bottom-left-radius: 14px;
+}
+
+.rec-card__btn--buy:hover:not(:disabled) {
+  background: #224a69;
+}
+
+.rec-card__btn--buy:disabled {
+  background: var(--color-slate-200);
+  color: var(--color-slate-300);
+  cursor: not-allowed;
+}
+
+/* Email — middle, teal tint */
+.rec-card__btn--email {
+  background: rgba(74, 144, 164, 0.08);
+  color: #2a7d9c;
+  border-left: 1.5px solid var(--color-slate-100);
+}
+
+.rec-card__btn--email:hover {
+  background: rgba(74, 144, 164, 0.15);
+}
+
+/* Negotiate — right, transparent */
+.rec-card__btn--negotiate {
+  background: transparent;
+  color: var(--color-navy);
+  border-left: 1.5px solid var(--color-slate-100);
+  border-bottom-right-radius: 14px;
+}
+
+.rec-card__btn--negotiate:hover {
+  background: rgba(26, 58, 82, 0.05);
+}
+
+/* When email-only: Email gets the right-corner radius */
+.rec-card__actions--email-only .rec-card__btn--email {
+  border-bottom-right-radius: 14px;
+}
+
+@media (max-width: 640px) {
+  .rec-card__body {
+    padding: 16px 16px 12px;
+  }
+
+  .rec-card__company {
+    font-size: 0.95rem;
+  }
+
+  .rec-card__price {
+    font-size: 1rem;
+  }
+
+  .rec-card__contact--link span {
+    max-width: 160px;
+  }
+}

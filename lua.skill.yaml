@@ -1,0 +1,15 @@
+agent:
+  agentId: baseAgent_agent_1777281593894_0t5ugvvrs
+  orgId: 295d5b4d-8e9f-4727-baab-60b127f5661d
+skills:
+  - name: web-scraping
+    skillId: fd53ab8f-bfdd-4c00-abb7-c32a387e1e85
+    version: 1.0.4
+webhooks: []
+jobs: []
+preprocessors: []
+postprocessors: []
+mcpServers: []
+backup:
+  lastHash: 23025c9627f49d2d4a7ba99a0158efa852ecb599dc0a911e05d1515554689b34
+  lastPushedAt: '2026-04-28T14:22:40.404Z'
