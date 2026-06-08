@@ -27,7 +27,6 @@
       "Bash(cp -r /c/Users/damna/Documents/GitHub/waddle/agent/src/utils  /c/Users/damna/Documents/GitHub/waddle/src/utils)",
       "Bash(lua admin *)",
       "Bash(python3 -m json.tool)",
-      "Bash(curl -s -X PATCH https://api.heylua.ai/agents/baseAgent/sub-agent -H 'Content-Type: application/json' -H 'Authorization: Bearer api_8e5dd01e94ea422ab0e6641f662e719d' -d '{\"id\":\"agent_1777281593894_0t5ugvvrs\",\"model\":\"anthropic/claude-sonnet-4-5\"}')",
       "Bash(curl -s http://localhost:5174/)",
       "Bash(curl -s \"http://localhost:5174/src/components/HeroSearch/HeroSearch.jsx\")",
       "Bash(curl -s \"http://localhost:5174/@fs/$\\(pwd\\)/frontend/src/components/QuestionCard/QuestionCard.jsx\")",

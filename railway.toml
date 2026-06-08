@@ -1,5 +1,0 @@
-[build]
-buildCommand = "(cd frontend && npm ci && npm run build) && (cd backend && npm ci && npm run build)"
-
-[deploy]
-startCommand = "node backend/dist/index.js"

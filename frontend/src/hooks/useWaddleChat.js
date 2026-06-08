@@ -100,6 +100,11 @@ export function useWaddleChat({ sessionId = null, onSessionCreated = null } = {}
   // can use the new ID before the parent prop re-renders.
   const activeSessionRef = useRef(null)
 
+  // Mirror of `messages` so _streamFromLLM (which has no deps) can read the
+  // latest turns synchronously to build the history sent to the backend.
+  const messagesRef = useRef([])
+  useEffect(() => { messagesRef.current = messages }, [messages])
+
   // When the sessionId prop changes, load (or reset) the chat.
   // Skip if activeSessionRef already equals sessionId — that means WE just
   // created this session ourselves (via ensureSession), so messages are
@@ -154,6 +159,12 @@ export function useWaddleChat({ sessionId = null, onSessionCreated = null } = {}
     const assistantId = crypto.randomUUID()
     let fullText = ''
 
+    // Build conversation history from prior user/assistant turns (the backend
+    // chat endpoint is stateless). Captured before the placeholder is added.
+    const history = messagesRef.current
+      .filter(m => (m.role === 'user' || m.role === 'assistant') && m.text)
+      .map(m => ({ role: m.role, text: m.text }))
+
     if (searching) setIsSearching(true)
     setMessages(prev => [
       ...prev,
@@ -164,7 +175,7 @@ export function useWaddleChat({ sessionId = null, onSessionCreated = null } = {}
     await streamMessage({
       message: llmMessage,
       locationContext: lastLocationRef.current,
-      threadId: threadId.current,
+      history,
       onChunk: (delta) => {
         fullText += delta
         setMessages(prev =>

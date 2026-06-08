@@ -1,0 +1,45 @@
+# Render Blueprint for the Waddle backend (Express + WhatsApp/Baileys).
+# In the Render dashboard: New → Blueprint → point at this repo.
+# Secrets are marked sync:false — set their values in the Render dashboard.
+services:
+  - type: web
+    name: waddle-backend
+    runtime: node
+    rootDir: backend
+    plan: starter            # a paid plan keeps the service always-on (needed for WhatsApp)
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: BACKEND_URL
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: JWT_SECRET
+        generateValue: true
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: EMAIL_USER
+        sync: false
+      - key: EMAIL_PASS
+        sync: false
+      - key: EMAIL_FROM_NAME
+        value: Waddle Procurement
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: OPENROUTER_MODEL
+        value: anthropic/claude-sonnet-4.5
+      - key: OPENROUTER_SMALL_MODEL
+        value: anthropic/claude-3.5-haiku
+      - key: OPENROUTER_SITE_URL
+        sync: false
+      - key: OPENROUTER_APP_NAME
+        value: Waddle

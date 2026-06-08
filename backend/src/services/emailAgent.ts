@@ -1,6 +1,4 @@
-import Anthropic from '@anthropic-ai/sdk'
-
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+import { openrouter, MAIN_MODEL } from './openrouter.js'
 
 export interface EmailContext {
   supplierName: string
@@ -17,8 +15,8 @@ export interface EmailDraft {
 }
 
 export async function generateEmailDraft(ctx: EmailContext): Promise<EmailDraft> {
-  const response = await client.messages.create({
-    model: 'claude-sonnet-4-6',
+  const response = await openrouter.chat.completions.create({
+    model: MAIN_MODEL,
     max_tokens: 800,
     messages: [
       {
@@ -42,9 +40,9 @@ Respond ONLY with valid JSON in this exact format — no explanation, no other t
     ],
   })
 
-  const raw = response.content[0].type === 'text' ? response.content[0].text.trim() : ''
+  const raw = response.choices[0]?.message?.content?.trim() ?? ''
   const match = raw.match(/\{[\s\S]*\}/)
-  if (!match) throw new Error('Claude did not return valid JSON')
+  if (!match) throw new Error('Model did not return valid JSON')
 
   const parsed = JSON.parse(match[0]) as { subject?: string; body?: string }
   if (!parsed.subject || !parsed.body) throw new Error('Email draft missing subject or body')

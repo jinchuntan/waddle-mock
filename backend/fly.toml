@@ -1,0 +1,33 @@
+# Fly.io config for the Waddle backend.
+# First run `fly launch --no-deploy` from the backend/ directory to set your app
+# name and region, set secrets with `fly secrets set KEY=value`, then `fly deploy`.
+app = "waddle-backend"
+primary_region = "sin"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[http_service]
+  internal_port = 3001
+  force_https = true
+  # WhatsApp/Baileys needs a persistent connection — do NOT scale to zero.
+  auto_stop_machines = false
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [[http_service.checks]]
+    method = "GET"
+    path = "/health"
+    interval = "30s"
+    timeout = "5s"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"
+
+# NOTE: WhatsApp auth state lives in backend/.baileys-auth. For it to survive
+# restarts/redeploys, attach a Fly volume and mount it there, e.g.:
+#   fly volumes create waddle_data --size 1
+# [mounts]
+#   source = "waddle_data"
+#   destination = "/app/.baileys-auth"

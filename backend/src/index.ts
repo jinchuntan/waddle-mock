@@ -4,6 +4,7 @@ import cors from 'cors'
 import session from 'express-session'
 import passport from 'passport'
 import path from 'path'
+import fs from 'fs'
 import { fileURLToPath } from 'url'
 import { runMigrations } from './db/migrate.js'
 import { whatsAppService } from './services/whatsappBaileys.js'
@@ -14,6 +15,7 @@ import sessionsRouter from './routes/sessions.js'
 import emailRouter from './routes/email.js'
 import authRouter from './routes/auth.js'
 import waddleForMeRouter from './routes/waddleForMe.js'
+import chatRouter from './routes/chat.js'
 
 const app = express()
 app.set('trust proxy', 1) // Railway (and other PaaS) terminate TLS at the proxy
@@ -32,17 +34,30 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 
+// Health check — used by Railway / Render / Fly.io platform probes
+app.get('/health', (_req, res) => res.json({ ok: true }))
+
 app.use('/api/auth', authRouter)
 app.use('/api/sessions', sessionsRouter)
 app.use('/api/email', emailRouter)
 app.use('/api/negotiate', negotiateRouter)
 app.use('/api/whatsapp', whatsappRouter)
 app.use('/api/waddle-for-me', waddleForMeRouter)
+app.use('/api/chat', chatRouter)
 
-app.use(express.static(FRONTEND_DIST))
-app.get('*', (_req, res) => {
-  res.sendFile(path.join(FRONTEND_DIST, 'index.html'))
-})
+// Optionally serve a co-located frontend build (handy for an all-in-one local
+// run). In the recommended split deployment the frontend lives on Vercel, so
+// frontend/dist won't exist here and this block is skipped.
+if (fs.existsSync(FRONTEND_DIST)) {
+  app.use(express.static(FRONTEND_DIST))
+  app.get('*', (_req, res) => {
+    res.sendFile(path.join(FRONTEND_DIST, 'index.html'))
+  })
+} else {
+  app.get('/', (_req, res) => {
+    res.json({ service: 'waddle-backend', status: 'ok' })
+  })
+}
 
 async function start(): Promise<void> {
   // 1. Run any pending DB migrations before anything else

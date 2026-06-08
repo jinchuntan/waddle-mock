@@ -1,0 +1,18 @@
+# Railway config for the Waddle backend (Express + WhatsApp/Baileys).
+# Deploy this as its OWN Railway service with:
+#   Settings → Root Directory = backend
+# Railway then reads this file and builds only the backend (the root Lua/
+# Playwright project and the Vercel frontend are NOT pulled in).
+
+[build]
+builder = "nixpacks"
+buildCommand = "npm ci && npm run build"
+
+[deploy]
+startCommand = "npm start"
+healthcheckPath = "/health"
+healthcheckTimeout = 100
+# Baileys holds a long-lived WhatsApp socket, so keep the service running and
+# restart it if it crashes rather than scaling to zero.
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 10

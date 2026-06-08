@@ -1,36 +1,35 @@
-const AGENT_ID = import.meta.env.VITE_LUA_AGENT_ID
-const API_KEY  = import.meta.env.VITE_LUA_API_KEY
-const BASE_URL = 'https://api.heylua.ai'
+import { apiFetch } from './api'
 
 /**
- * Streams a message to the Waddle agent and calls onChunk for each text delta.
+ * Streams a procurement chat message to the Waddle backend and calls onChunk for
+ * each text delta. The backend talks to OpenRouter server-side — no AI provider
+ * keys are ever exposed to the browser.
+ *
  * @param {object} opts
  * @param {string} opts.message          - The user's message
- * @param {string} opts.locationContext  - Location instruction appended as runtime context
- * @param {string} opts.threadId         - Conversation thread ID for history continuity
+ * @param {string} opts.locationContext  - Location instruction passed as context
+ * @param {Array<{role:'user'|'assistant',text:string}>} opts.history - Prior turns for context
  * @param {function} opts.onChunk        - Called with each text delta string
  * @param {function} opts.onDone         - Called when stream completes
  * @param {function} opts.onError        - Called with error message string
  */
-export async function streamMessage({ message, locationContext, threadId, onChunk, onDone, onError }) {
+export async function streamMessage({ message, locationContext, history = [], onChunk, onDone, onError }) {
   try {
-    const response = await fetch(`${BASE_URL}/chat/stream/${AGENT_ID}?channel=web`, {
+    const response = await apiFetch('/api/chat/stream', {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        messages:        [{ type: 'text', text: message }],
-        navigate:        false,
-        skillOverride:   [],
-        runtimeContext:  locationContext,
-        threadId,
-      }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message, locationContext, history }),
     })
 
     if (!response.ok) {
-      throw new Error(`API error ${response.status}: ${await response.text()}`)
+      let detail = ''
+      try {
+        const data = await response.json()
+        detail = data.error ?? ''
+      } catch {
+        detail = await response.text()
+      }
+      throw new Error(`API error ${response.status}${detail ? `: ${detail}` : ''}`)
     }
 
     const reader  = response.body.getReader()
@@ -47,14 +46,18 @@ export async function streamMessage({ message, locationContext, threadId, onChun
 
       for (const line of lines) {
         if (!line.trim()) continue
+        let chunk
         try {
-          const chunk = JSON.parse(line)
-          if (chunk.type === 'text-delta' && chunk.textDelta) {
-            onChunk(chunk.textDelta)
-          }
+          chunk = JSON.parse(line)
         } catch {
-          // skip malformed lines
+          continue // skip malformed/partial lines
         }
+        if (chunk.type === 'text-delta' && chunk.textDelta) {
+          onChunk(chunk.textDelta)
+        } else if (chunk.type === 'error') {
+          throw new Error(chunk.error ?? 'Stream error')
+        }
+        // chunk.type === 'done' — stream finished; onDone called after the loop
       }
     }
 

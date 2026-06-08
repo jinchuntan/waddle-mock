@@ -1,12 +1,11 @@
-import Anthropic from '@anthropic-ai/sdk'
+import type OpenAI from 'openai'
+import { openrouter, MAIN_MODEL, SMALL_MODEL } from './openrouter.js'
 import { getNegotiation, updateNegotiation } from '../db/queries/negotiations.js'
 import { appendMessage, getRecentMessages } from '../db/queries/messages.js'
 import { whatsAppService } from './whatsappBaileys.js'
 import { sseManager } from './sseManager.js'
 import { calculateReadDelay, calculateTypingDelay } from '../utils/delayCalculator.js'
 import type { ConversationMessage, DetectionResult, NegotiationTurnResult } from '../types.js'
-
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
 const CONTEXT_WINDOW_SIZE = 6
 const MAX_AGENT_ROUNDS    = 5
@@ -24,8 +23,9 @@ function isRateLimited(phone: string): boolean {
   return timestamps.length > RATE_LIMIT_MAX
 }
 
-// Cached system prompt — Anthropic charges 10% for cache hits vs full price
-// This alone cuts ~65–70% of input token cost across a multi-turn negotiation
+// System prompt sent on every turn. Kept stable across the conversation so
+// OpenRouter / the upstream provider can serve it from prompt cache where
+// supported, trimming input-token cost on a multi-turn negotiation.
 const SYSTEM_PROMPT = `You are a procurement negotiation assistant for Waddle. You negotiate with suppliers via WhatsApp on behalf of a buyer.
 
 Your goal: get the best price, MOQ (minimum order quantity), and lead time for the requested product.
@@ -43,11 +43,16 @@ When negotiation is complete (you have price, MOQ, and lead time) OR after ${MAX
 
 Otherwise respond with only the WhatsApp message text to send — no JSON, no extra formatting.`
 
-// ── Token-efficient detection (Haiku — ~25x cheaper than Sonnet) ──────────
+// ── Token-efficient detection (small model — much cheaper than the main one) ──
 // Classifies incoming supplier message before deciding how to respond
 async function detectSupplierIntent(supplierText: string): Promise<DetectionResult> {
-  const response = await client.messages.create({
-    model: 'claude-haiku-4-5-20251001',
+  const empty: DetectionResult = {
+    hasQuotedPrice: false, isNegotiationComplete: false, isRejection: false,
+    asksQuestion: false, extractedPrice: null, extractedMoq: null, extractedLeadTime: null,
+  }
+
+  const response = await openrouter.chat.completions.create({
+    model: SMALL_MODEL,
     max_tokens: 150,
     messages: [
       {
@@ -79,20 +84,20 @@ Rules:
     ],
   })
 
-  const textBlock = response.content.find(b => b.type === 'text')
-  if (!textBlock || textBlock.type !== 'text') {
-    return { hasQuotedPrice: false, isNegotiationComplete: false, isRejection: false, asksQuestion: false, extractedPrice: null, extractedMoq: null, extractedLeadTime: null }
-  }
+  const text = response.choices[0]?.message?.content?.trim()
+  if (!text) return empty
 
+  // Models sometimes wrap JSON in prose or code fences — extract the object.
+  const match = text.match(/\{[\s\S]*\}/)
   try {
-    return JSON.parse(textBlock.text.trim()) as DetectionResult
+    return JSON.parse(match ? match[0] : text) as DetectionResult
   } catch {
-    return { hasQuotedPrice: false, isNegotiationComplete: false, isRejection: false, asksQuestion: false, extractedPrice: null, extractedMoq: null, extractedLeadTime: null }
+    return empty
   }
 }
 
 // ── Context window builder ─────────────────────────────────────────────────
-function buildMessages(messages: ConversationMessage[]): Anthropic.MessageParam[] {
+function buildMessages(messages: ConversationMessage[]): OpenAI.Chat.ChatCompletionMessageParam[] {
   return messages.map(msg => ({
     role: msg.role === 'agent' ? ('assistant' as const) : ('user' as const),
     content: msg.text,
@@ -168,28 +173,22 @@ export async function runNegotiationTurn(negotiationId: string): Promise<Negotia
     return { done: true, summary: fresh?.summary ?? '' }
   }
 
-  // Phase 3: Craft reply (Sonnet with cached system prompt + sliding window)
+  // Phase 3: Craft reply (main model with system prompt + sliding window)
   sseManager.emit(negotiationId, 'activity', { text: 'Crafting response...' })
 
   const recentMessages = await getRecentMessages(negotiationId, CONTEXT_WINDOW_SIZE)
 
-  const response = await client.messages.create({
-    model: 'claude-sonnet-4-6',
+  const response = await openrouter.chat.completions.create({
+    model: MAIN_MODEL,
     max_tokens: 350,
-    system: [
-      {
-        type: 'text',
-        text: SYSTEM_PROMPT,
-        cache_control: { type: 'ephemeral' },
-      },
+    messages: [
+      { role: 'system', content: SYSTEM_PROMPT },
+      ...buildMessages(recentMessages),
     ],
-    messages: buildMessages(recentMessages),
   })
 
-  const textBlock = response.content.find(b => b.type === 'text')
-  if (!textBlock || textBlock.type !== 'text') return { done: false }
-
-  const replyText = textBlock.text.trim()
+  const replyText = response.choices[0]?.message?.content?.trim()
+  if (!replyText) return { done: false }
 
   // Check if Claude signalled completion
   try {
