@@ -1,5 +1,9 @@
 # 🐧 Waddle
 
+**Winner · Dollar Track, AI.SEA $1 Sprint**
+
+[Product](https://waddle.fovea.space/) · [Project and recognition](https://www.fovea.space/#recognition)
+
 **Waddle is an agentic AI procurement assistant for SMEs.** It helps small and
 medium businesses source products without a dedicated procurement team: search
 for suppliers, compare options, draft supplier inquiry emails, and negotiate
